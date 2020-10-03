@@ -1,0 +1,11 @@
+*.pyc
+*.egg-info
+.cache
+.pytest_cache
+.coverage
+.tox
+coverage-report
+report.xml
+access.log
+error.log
+nginx.pid
