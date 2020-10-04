@@ -61,11 +61,13 @@ class GameView(tornado.websocket.WebSocketHandler):
         log.debug('processing %s', message)
         for key, value in message.items():
             setattr(self.game, key, value)
+        if 'position' in message:
+            message['card'] = self.game.card
         self._send_update(message)
 
     def _send_update(self, message):
         for client in self.clients:
-            if client is self:
+            if client is self and 'card' not in message:
                 continue
             client.write_message(message)
 

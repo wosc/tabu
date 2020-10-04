@@ -1,7 +1,10 @@
 .score1 {
-    color: blue;
+    color: maroon;
 }
-
 .score2 {
     color: green;
+}
+
+.pointer {
+    cursor: pointer;
 }

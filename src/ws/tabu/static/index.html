@@ -18,23 +18,51 @@
 <div class="container">
     <div class="row">
          <div class="col">
-             <div id="score1"></div>
+             <span id="score1"></span>
+         </div>
+         <div class="col pt-5">
+             <span id="player"></span>
          </div>
          <div class="col">
+             <span id="score2"></span>
          </div>
-         <div class="col">
-             <div id="score2"></div>
-         </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col">
+        </div>
+        <div class="col">
+            <span id="card"></span>
+        </div>
+        <div class="col pt-5">
+        </div>
     </div>
 </div>
 
 <script id="template-score" type="x-template">
     <div :class="name">
-    <i class="material-icons" style="cursor: pointer" v-on:click="decr">remove_circle_outline</i>
+    <i class="material-icons pointer" v-on:click="decr">remove_circle_outline</i>
     <span style="font-size: 5em">{{score}}</span>
-    <i class="material-icons" style="cursor: pointer" v-on:click="incr">add_circle_outline</i>
+    <i class="material-icons pointer" v-on:click="incr">add_circle_outline</i>
     </div>
 </script>
+
+<script id="template-player" type="x-template">
+   <div>
+   <button id="player" class="btn btn-raised btn-secondary" v-on:click="toggle">{{title}}</button>
+   <div id="seed" class="invisible">{{context.seed}}</div>
+   </div>
+</script>
+
+<script id="template-card" type="x-template">
+        <div v-if="context.card_visible">
+        <h1>{{context.card[0]}}</h1>
+        <h3 v-for="i in 5" :class="(i == 1 ? 'mt-4' : '')">{{context.card[i]}}</h3>
+
+        <button class="btn btn-raised btn-primary mt-5" v-on:click="next">weiter &raquo;</button>
+    </div>
+</script>
+
 
 <script src="js/game.js"></script>
 
