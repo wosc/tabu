@@ -53,8 +53,14 @@ class GameView(tornado.websocket.WebSocketHandler):
     def open(self):
         log.debug('websocket opened')
         self.clients.add(self)
-        log.debug('send %s' % self.game.to_json())
-        self.write_message(self.game.to_json())
+        data = self.game.to_json()
+        # The timer is client-side, so it doesn't make sense to start it
+        # if a client joins while one is already running. And we don't want
+        # to synchronize it through the server, because that's
+        # `1 req/s * number of clients`.
+        data['running'] = False
+        log.debug('send %s' % data)
+        self.write_message(data)
 
     def on_message(self, message):
         message = json.loads(message)

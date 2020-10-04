@@ -35,6 +35,7 @@
             <span id="card"></span>
         </div>
         <div class="col pt-5">
+            <span id="hourglass"></span>
         </div>
     </div>
 </div>
@@ -60,6 +61,16 @@
         <h3 v-for="i in 5" :class="(i == 1 ? 'mt-4' : '')">{{context.card[i]}}</h3>
 
         <button class="btn btn-raised btn-primary mt-5" v-on:click="next">weiter &raquo;</button>
+    </div>
+</script>
+
+<script id="template-hourglass" type="x-template">
+    <div>
+    <div class="progress" style="height: 20px">
+    <div class="progress-bar" :style="{width: percent + '%'}"></div>
+    </div>
+    <i class="material-icons pointer" v-on:click="play">{{context.running ? 'pause' : 'play'}}_circle_outline</i>
+    <i class="material-icons pointer" v-on:click="reset">replay</i>
     </div>
 </script>
 

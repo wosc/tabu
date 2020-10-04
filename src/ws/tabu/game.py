@@ -16,6 +16,9 @@ class Game:
         self.score1 = 0
         self.score2 = 0
 
+        self.running = False
+        self.seconds = 60
+
     @property
     def card(self):
         try:
@@ -25,7 +28,9 @@ class Game:
 
     def to_json(self):
         return {key: getattr(self, key) for key in [
-            'score1', 'score2', 'position', 'card', 'seed']}
+            'score1', 'score2',
+            'running', 'seconds',
+            'position', 'card', 'seed']}
 
 
 CARDS = []

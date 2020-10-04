@@ -7,6 +7,9 @@ const GameController = {
         'position': 0,
         'seed': '',
 
+        'running': false,
+        'seconds': 1,
+
         'card_visible': false
     },
 
@@ -28,19 +31,35 @@ const GameController = {
             for (var key in data) {
                 self.data[key] = data[key];
             }
+            if (data['seconds']) {
+                HourglassView.seconds = data['seconds'];
+            }
         });
+    },
+
+    send: function(data) {
+        this.socket.send(JSON.stringify(data));
     },
 
     update_score: function(variable, delta) {
         this.data[variable] += delta;
         const message = {};
         message[variable] = this.data[variable];
-        this.socket.send(JSON.stringify(message));
+        this.send(message);
     },
 
     next_card: function() {
         this.data.position += 1;
-        this.socket.send(JSON.stringify({position: this.data.position}));
+        this.send({position: this.data.position});
+    },
+
+    toggle_hourglass: function() {
+        this.data.running = !this.data.running;
+        this.send({running: this.data.running});
+    },
+
+    reset_hourglass: function() {
+        this.send({seconds: this.data.seconds});
     }
 
 };
@@ -99,6 +118,53 @@ const CardView = new Vue({
     methods: {
         next: function(event) {
             CONTROLLER.next_card();
+        }
+    }
+});
+
+
+const HourglassView = new Vue({
+    el: '#hourglass',
+    template: '#template-hourglass',
+    data: {
+        'context': CONTROLLER.data,
+        'seconds': CONTROLLER.data.seconds,
+        'timer': null
+    },
+    computed: {
+        'percent': function() {
+            return (this.seconds / this.context.seconds) * 100;
+        }
+    },
+    watch: {
+        'context.running': function(value, previous) {
+            const self = this;
+            if (value) {
+                if (self.timer) {
+                    return;
+                }
+                self.timer = window.setInterval(function() {
+                    self.seconds -= 1;
+                    if (self.seconds <= 0) {
+                        self.seconds = 0;
+                        self.context.running = false;
+                    }
+                }, 1000);
+            } else {
+                if (self.timer) {
+                    window.clearInterval(self.timer);
+                    self.timer = null;
+                }
+            }
+        }
+    },
+    methods: {
+        play: function(event) {
+            CONTROLLER.toggle_hourglass();
+        },
+        reset: function(event) {
+            CONTROLLER.reset_hourglass();
+            this.seconds = this.context.seconds;
         }
     }
 });
