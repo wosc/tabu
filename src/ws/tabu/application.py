@@ -93,7 +93,10 @@ class GameList(tornado.web.RequestHandler):
 
     async def get(self):
         self.write({
-            'games': list(Game.games.keys()),
+            'games': [
+                {'seed': x.seed, 'created': x.created.isoformat(),
+                 'cardset': x.cardset}
+                for x in sorted(Game.games.values(), key=lambda x: x.created)],
             'cardsets': sorted(list(CARDS.keys())),
         })
 

@@ -1,3 +1,4 @@
+from datetime import datetime
 from glob import glob
 import os.path
 import pkg_resources
@@ -10,6 +11,8 @@ class Game:
     games = {}
 
     def __init__(self, cardset='example'):
+        self.created = datetime.now()
+
         self.seed = uuid.uuid4().hex
         self.games[self.seed] = self
         self.random = random.Random(self.seed)

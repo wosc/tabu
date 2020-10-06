@@ -22,17 +22,10 @@
         <div class="row mt-3">
             <h2>An Spiel teilnehmen</h2>
         </div>
-        <div class="row">
-            <form action="./game" method="GET" class="form-inline">
-            <input type="text" name="seed" class="form-control" placeholder="Seed (cd1492...) eingeben"></input>
-            <button class="btn btn-raised btn-secondary ml-2">spielen</button>
-            </form>
+        <div class="row pt-3">
+            <span id="games"></span>
         </div>
-        <div class="row">
-            Oder einfach die Spiel-URL direkt aufrufen
-            (z.B. <code>https://wosc.de/tabu/game?seed=cd1492...</code>)
-        </div>
-        <div class="row border-top mt-5 pt-5">
+        <div class="row mt-5">
             <h2>Neues Spiel</h2>
         </div>
         <div class="row">
@@ -43,8 +36,14 @@
         </div>
     </div>
 
+    <script id="template-games" type="x-template">
+     <ul>
+         <li v-for="game in context.games"><a :href="'./game?seed=' + game.seed">{{game.created | format_date}} ({{game.cardset}})</a></li>
+     </ul>
+    </script>
+
     <script id="template-cardset" type="x-template">
-     <select name="cardset" id="cardset" class="form-control">
+     <select name="cardset" class="form-control">
      <option v-for="name in context.cardsets">{{name}}</option>
      </select>
     </script>

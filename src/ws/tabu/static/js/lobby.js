@@ -1,6 +1,7 @@
 const LobbyController = {
     data: {
-        'cardsets': []
+        'cardsets': [],
+        'games': []
     },
     init: function() {
         var self = this;
@@ -10,7 +11,9 @@ const LobbyController = {
         }).then(function(response) {
             return response.json();
         }).then(function(data) {
-            self.data.cardsets = data['cardsets'];
+            for (var key in data) {
+                self.data[key] = data[key];
+            }
         }).catch(function(error) {
             throw error;
         });
@@ -18,6 +21,20 @@ const LobbyController = {
 };
 const CONTROLLER = LobbyController;
 CONTROLLER.init();
+
+
+const JoinGameView = new Vue({
+    el: '#games',
+    template: '#template-games',
+    data: {
+        'context': CONTROLLER.data,
+    },
+    filters: {
+        format_date: function(value) {
+            return new Date(value).toLocaleString('de');
+        }
+    }
+});
 
 
 const CardsetView = new Vue({
