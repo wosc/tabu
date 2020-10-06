@@ -21,12 +21,20 @@ const GameController = {
         const self = this;
         const loc = window.location;
         const scheme = loc.protocol === 'https:' ? 'wss://' : 'ws://';
+        const query = new URLSearchParams(loc.search);
+        self.data.seed = query.get('seed');
         self.socket = new WebSocket(
             scheme + loc.host + loc.pathname.match(/.*\//) + 'api/socket');
         self.socket.addEventListener('error', function(event) {
             console.log(event);
         });
-        this.socket.addEventListener('message', function(event) {
+        self.socket.addEventListener('open', function(event) {
+            self.send({action: 'join'});
+        });
+        self.socket.addEventListener('close', function(event) {
+            self.send({action: 'leave'});
+        });
+        self.socket.addEventListener('message', function(event) {
             const data = JSON.parse(event.data);
             for (var key in data) {
                 self.data[key] = data[key];
@@ -38,6 +46,7 @@ const GameController = {
     },
 
     send: function(data) {
+        data['seed'] = this.data.seed;
         this.socket.send(JSON.stringify(data));
     },
 

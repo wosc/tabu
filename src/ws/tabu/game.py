@@ -5,8 +5,11 @@ import uuid
 
 class Game:
 
+    games = {}
+
     def __init__(self):
         self.seed = uuid.uuid4().hex
+        self.games[self.seed] = self
         self.random = random.Random(self.seed)
 
         self.shuffle = list(range(len(CARDS)))
