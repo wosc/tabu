@@ -22,7 +22,7 @@ const GameController = {
         const loc = window.location;
         const scheme = loc.protocol === 'https:' ? 'wss://' : 'ws://';
         self.socket = new WebSocket(
-            scheme + loc.host + loc.pathname + 'api/socket');
+            scheme + loc.host + loc.pathname.match(/.*\//) + 'api/socket');
         self.socket.addEventListener('error', function(event) {
             console.log(event);
         });
