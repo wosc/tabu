@@ -1,3 +1,5 @@
+from glob import glob
+import os.path
 import pkg_resources
 import random
 import uuid
@@ -7,12 +9,13 @@ class Game:
 
     games = {}
 
-    def __init__(self):
+    def __init__(self, cardset='example'):
         self.seed = uuid.uuid4().hex
         self.games[self.seed] = self
         self.random = random.Random(self.seed)
 
-        self.shuffle = list(range(len(CARDS)))
+        self.cardset = cardset
+        self.shuffle = list(range(len(CARDS[self.cardset])))
         self.random.shuffle(self.shuffle)
         self.position = 0
 
@@ -27,7 +30,7 @@ class Game:
     @property
     def card(self):
         try:
-            return CARDS[self.shuffle[self.position]]
+            return CARDS[self.cardset][self.shuffle[self.position]]
         except IndexError:
             return ['Kartenstapel leer']
 
@@ -38,19 +41,22 @@ class Game:
             'position', 'card', 'seed']}
 
 
-CARDS = []
+CARDS = {}
 
 
 def parse_cards():
-    card = []
-    for line in pkg_resources.resource_stream(__name__, 'cards.txt'):
-        line = line.decode('utf-8').strip()
-        if not line:
-            CARDS.append(card)
-            card = []
-        else:
-            card.append(line)
-    CARDS.append(card)
+    for filename in glob(
+            pkg_resources.resource_filename(__name__, 'cards') + '/*.txt'):
+        card = []
+        cardset = CARDS[os.path.splitext(os.path.basename(filename))[0]] = []
+        for line in open(filename):
+            line = line.strip()
+            if not line:
+                cardset.append(card)
+                card = []
+            else:
+                card.append(line)
+        cardset.append(card)
 
 
 parse_cards()

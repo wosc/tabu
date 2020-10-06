@@ -37,9 +37,18 @@
         </div>
         <div class="row">
             <form action="./api/games" method="POST" class="form-inline">
-                <button class="btn btn-raised btn-primary">starten</button>
+                Kartensatz: <span id="cardset"></span>
+                <button class="btn btn-raised btn-primary ml-2">starten</button>
             </form>
         </div>
     </div>
+
+    <script id="template-cardset" type="x-template">
+     <select name="cardset" id="cardset" class="form-control">
+     <option v-for="name in context.cardsets">{{name}}</option>
+     </select>
+    </script>
+
+    <script src="js/lobby.js"></script>
 </body>
 </html>

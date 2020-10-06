@@ -1,5 +1,5 @@
 from tornado.ioloop import IOLoop
-from ws.tabu.game import Game
+from ws.tabu.game import Game, CARDS
 import json
 import logging
 import signal
@@ -92,8 +92,11 @@ class GameView(tornado.websocket.WebSocketHandler):
 class GameList(tornado.web.RequestHandler):
 
     async def get(self):
-        self.write({'games': list(Game.games.keys())})
+        self.write({
+            'games': list(Game.games.keys()),
+            'cardsets': sorted(list(CARDS.keys())),
+        })
 
     async def post(self):
-        game = Game()
+        game = Game(self.get_argument('cardset'))
         self.redirect('../game?seed=%s' % game.seed)
