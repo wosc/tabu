@@ -19,6 +19,8 @@ class Game:
         self.running = False
         self.seconds = 60
 
+        self.clients = set()
+
     @property
     def card(self):
         try:

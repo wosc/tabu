@@ -48,11 +48,10 @@ def shutdown(*args):
 class GameView(tornado.websocket.WebSocketHandler):
 
     game = Game()
-    clients = set()
 
     def open(self):
         log.debug('websocket opened')
-        self.clients.add(self)
+        self.game.clients.add(self)
         data = self.game.to_json()
         # The timer is client-side, so it doesn't make sense to start it
         # if a client joins while one is already running. And we don't want
@@ -72,11 +71,11 @@ class GameView(tornado.websocket.WebSocketHandler):
         self._send_update(message)
 
     def _send_update(self, message):
-        for client in self.clients:
+        for client in self.game.clients:
             if client is self and 'card' not in message:
                 continue
             client.write_message(message)
 
     def on_close(self):
         log.debug('websocket closed')
-        self.clients.remove(self)
+        self.game.clients.remove(self)
