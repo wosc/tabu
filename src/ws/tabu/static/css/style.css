@@ -1,8 +1,15 @@
-.score1 {
+/* XXX why does textare need a separate selector? */
+.score1, .team1, .team1 textarea {
     color: maroon;
 }
-.score2 {
+.score2, .team2, .team2 textarea {
     color: green;
+}
+
+.members {
+    font-size: 1.75rem;
+    height: 20rem !important;
+    background-image: none;
 }
 
 .pointer {

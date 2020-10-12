@@ -25,6 +25,9 @@ class Game:
         self.score1 = 0
         self.score2 = 0
 
+        self.team1 = ''
+        self.team2 = ''
+
         self.running = False
         self.seconds = 60
 
@@ -39,7 +42,7 @@ class Game:
 
     def to_json(self):
         return {key: getattr(self, key) for key in [
-            'score1', 'score2',
+            'score1', 'score2', 'team1', 'team2',
             'running', 'seconds',
             'position', 'card', 'seed']}
 

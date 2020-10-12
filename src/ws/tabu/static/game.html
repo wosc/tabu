@@ -38,6 +38,17 @@
             <span id="hourglass"></span>
         </div>
     </div>
+
+    <div class="row mt-5">
+        <div class="col">
+            <span id="team1"></span>
+        </div>
+        <div class="col">
+        </div>
+        <div class="col">
+            <span id="team2"></span>
+        </div>
+    </div>
 </div>
 
 <script id="template-score" type="x-template">
@@ -74,6 +85,12 @@
     </div>
 </script>
 
+<script id="template-team" type="x-template">
+<div :class="name">
+    <h2>Team {{title}}</h2>
+    <textarea class="form-control members" v-on:change="update">{{members}}</textarea>
+</div>
+</script>
 
 <script src="js/game.js"></script>
 

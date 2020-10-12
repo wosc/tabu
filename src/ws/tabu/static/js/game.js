@@ -3,6 +3,9 @@ const GameController = {
         'score1': 0,
         'score2': 0,
 
+        'team1': '',
+        'team2': '',
+
         'card': [],
         'position': 0,
         'seed': '',
@@ -52,6 +55,13 @@ const GameController = {
 
     update_score: function(variable, delta) {
         this.data[variable] += delta;
+        const message = {};
+        message[variable] = this.data[variable];
+        this.send(message);
+    },
+
+    update_team: function(variable, value) {
+        this.data[variable] = value;
         const message = {};
         message[variable] = this.data[variable];
         this.send(message);
@@ -177,3 +187,27 @@ const HourglassView = new Vue({
         }
     }
 });
+
+
+const TeamView = function(variable, title) {
+    new Vue({
+        el: '#' + variable,
+        template: '#template-team',
+        data: {
+            'context': CONTROLLER.data,
+            'name': variable,
+            'title': title
+        },
+        computed: {
+            'members': function() { return this.context[variable]; }
+        },
+        methods: {
+            update: function(event) {
+                CONTROLLER.update_team(variable, document.querySelector('.' + variable + ' textarea').value);
+            }
+        }
+    });
+};
+
+TeamView('team1', 'rot');
+TeamView('team2', 'grün');
