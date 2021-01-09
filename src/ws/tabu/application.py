@@ -71,6 +71,9 @@ class GameView(tornado.websocket.WebSocketHandler):
                 setattr(game, key, value)
             if 'position' in message:
                 message['card'] = game.card
+                if game.card == game.EMPTY:
+                    game.reshuffle()
+                    message['position'] = -1
             self._send_update(game, message)
 
     def _send_update(self, game, message):

@@ -9,6 +9,7 @@ import uuid
 class Game:
 
     games = {}
+    EMPTY = ['Kartenstapel leer']
 
     def __init__(self, cardset='example'):
         self.created = datetime.now()
@@ -20,6 +21,8 @@ class Game:
         self.cardset = cardset
         self.shuffle = list(range(len(CARDS[self.cardset])))
         self.random.shuffle(self.shuffle)
+        if cardset.startswith('timesup'):
+            self.shuffle = self.shuffle[:40]
         self.position = 0
 
         self.score1 = 0
@@ -30,6 +33,8 @@ class Game:
 
         self.running = False
         self.seconds = 60
+        if cardset.startswith('timesup'):
+            self.seconds = 30
 
         self.clients = set()
 
@@ -38,7 +43,10 @@ class Game:
         try:
             return CARDS[self.cardset][self.shuffle[self.position]]
         except IndexError:
-            return ['Kartenstapel leer']
+            return self.EMPTY
+
+    def reshuffle(self):
+        self.random.shuffle(self.shuffle)
 
     def to_json(self):
         return {key: getattr(self, key) for key in [
@@ -56,8 +64,8 @@ def parse_cards():
         card = []
         cardset = CARDS[os.path.splitext(os.path.basename(filename))[0]] = []
         for line in open(filename):
-            line = line.strip()
-            if not line:
+            line = line[:-1]
+            if line == "":
                 cardset.append(card)
                 card = []
             else:
