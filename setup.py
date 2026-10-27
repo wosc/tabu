@@ -1,6 +1,6 @@
 """Tabu board game web application
 """
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 import glob
 
 
@@ -9,7 +9,6 @@ setup(
     version='1.0.0.dev0',
 
     install_requires=[
-        'setuptools',
         'tornado',
     ],
 
@@ -40,8 +39,7 @@ Programming Language :: Python
 Programming Language :: Python :: 3
 """[:-1].split('\n'),
 
-    namespace_packages=['ws'],
-    packages=find_packages('src'),
+    packages=find_namespace_packages('src'),
     package_dir={'': 'src'},
     include_package_data=True,
     data_files=[('', glob.glob('*.txt'))],

@@ -1,7 +1,7 @@
 from datetime import datetime
 from glob import glob
+import importlib.resources
 import os.path
-import pkg_resources
 import random
 import uuid
 
@@ -60,7 +60,7 @@ CARDS = {}
 
 def parse_cards():
     for filename in glob(
-            pkg_resources.resource_filename(__name__, 'cards') + '/*.txt'):
+            str(importlib.resources.files(__package__)) + '/cards/*.txt'):
         card = []
         cardset = CARDS[os.path.splitext(os.path.basename(filename))[0]] = []
         for line in open(filename):
